@@ -7,7 +7,10 @@ import requests
 from io import BytesIO
 from PIL import Image
 import json
+
 sns.set_theme()
+
+
 def anomaly_detector(lst):
     m, s = np.mean(lst), np.std(lst)
     cutoff = s*2
@@ -33,6 +36,12 @@ df_education_details_section = df[df['section'] == "education_details_section"]
 st.set_page_config(page_title="MLOPS Monitoring System Dashboard", page_icon=":bar_chart:", layout="wide")
 st.title(":bar_chart: MLOPS Monitoring System")
 
+imgSource = "https://i.ibb.co/sbGk2NW/People-Tech-Group-001-s-QBw-S61-max-600x480.png"
+response = requests.get(imgSource)
+img = Image.open(BytesIO(response.content))
+
+st.sidebar.image(img, use_column_width=True)
+
 with st.sidebar:
     button_0 = st.button("Home", type="primary")
     button_3 = st.button("System Health", type="primary")
@@ -41,15 +50,17 @@ with st.sidebar:
     button_4 = st.button("covariate shift", type="primary")
     button_5 = st.button("univariate shift", type="primary")
 
+
 if button_0:
+    # Header
     st.title("Welcome to Our Resume Analyzer!")
     st.write("A project by People Tech Group to facilitate resume evaluations.")
     
-    imgSource = "https://frontlinesmedia.in/wp-content/uploads/2023/01/360_F_123153554_yOKJlsTu3hpbVVmcGRyOKG3d1A48IpP7.jpg"
-    response = requests.get(imgSource)
-    img = Image.open(BytesIO(response.content))
-    st.image(img, caption='People Tech Group', use_column_width='auto', width=400)  
+    # Display GIF
+    gif_url = "https://www.thedigitalgroup.com/products/digital-resume-parser/assets/img/about/resume-parsing-option.gif"
+    st.image(gif_url, caption='Resume Parsing in Action', use_column_width=True)
 
+    # Features
     st.subheader("Features at a Glance:")
     st.markdown("""
     - **Performance Metrics**: Comprehensive quality and relevance evaluation of entire resumes.
@@ -57,6 +68,7 @@ if button_0:
     - **Covariate Shift**: Witness the evolution of data over time through intuitive bar graphs.
     - **Univariate Shift**: Keep an eye on trending resume keywords.
     """)
+
 
 
 else: 
@@ -484,4 +496,3 @@ else:
     else:
         image = Image.open('utilities/system_health.png')
         st.image(image, caption='System health')
-
