@@ -10,6 +10,22 @@ import json
 
 sns.set_theme()
 
+def home():
+    st.title("Welcome to Our Resume Analyzer!")
+    st.write("A project by People Tech Group to facilitate resume evaluations.")
+        
+        
+    gif_url = "https://www.thedigitalgroup.com/products/digital-resume-parser/assets/img/about/resume-parsing-option.gif"
+    st.image(gif_url, caption='Resume Parsing in Action', use_column_width=True)
+
+    st.subheader("Features at a Glance:")
+    st.markdown("""
+    - **Performance Metrics**: Comprehensive quality and relevance evaluation of entire resumes.
+    - **Anomaly Detection**: Pinpoint inconsistencies, backed by an F1 score visualization.
+    - **Covariate Shift**: Witness the evolution of data over time through intuitive bar graphs.
+    - **Univariate Shift**: Keep an eye on trending resume keywords.
+    """)
+
 
 def anomaly_detector(lst):
     m, s = np.mean(lst), np.std(lst)
@@ -52,22 +68,7 @@ with st.sidebar:
 
 
 if button_0:
-    st.title("Welcome to Our Resume Analyzer!")
-    st.write("A project by People Tech Group to facilitate resume evaluations.")
-    
-    
-    gif_url = "https://www.thedigitalgroup.com/products/digital-resume-parser/assets/img/about/resume-parsing-option.gif"
-    st.image(gif_url, caption='Resume Parsing in Action', use_column_width=True)
-
-    st.subheader("Features at a Glance:")
-    st.markdown("""
-    - **Performance Metrics**: Comprehensive quality and relevance evaluation of entire resumes.
-    - **Anomaly Detection**: Pinpoint inconsistencies, backed by an F1 score visualization.
-    - **Covariate Shift**: Witness the evolution of data over time through intuitive bar graphs.
-    - **Univariate Shift**: Keep an eye on trending resume keywords.
-    """)
-
-
+    home()
 
 else: 
     if button_1:
@@ -492,5 +493,6 @@ else:
             plt.legend()
             st.pyplot(fig_11)
     else:
-        image = Image.open('utilities/system_health.png')
-        st.image(image, caption='System health')
+        home()
+        
+    
