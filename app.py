@@ -47,20 +47,18 @@ with st.sidebar:
     button_3 = st.button("System Health", type="primary")
     button_1 = st.button("Performance Metrics", type="primary")
     button_2 = st.button("Anomaly Detection", type="primary")
-    button_4 = st.button("covariate shift", type="primary")
-    button_5 = st.button("univariate shift", type="primary")
+    button_4 = st.button("Covariate shift", type="primary")
+    button_5 = st.button("Univariate shift", type="primary")
 
 
 if button_0:
-    # Header
     st.title("Welcome to Our Resume Analyzer!")
     st.write("A project by People Tech Group to facilitate resume evaluations.")
     
-    # Display GIF
+    
     gif_url = "https://www.thedigitalgroup.com/products/digital-resume-parser/assets/img/about/resume-parsing-option.gif"
     st.image(gif_url, caption='Resume Parsing in Action', use_column_width=True)
 
-    # Features
     st.subheader("Features at a Glance:")
     st.markdown("""
     - **Performance Metrics**: Comprehensive quality and relevance evaluation of entire resumes.
