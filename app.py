@@ -65,6 +65,7 @@ with st.sidebar:
     button_2 = st.button("Anomaly Detection", type="primary")
     button_4 = st.button("Covariate shift", type="primary")
     button_5 = st.button("Univariate shift", type="primary")
+    button_6 = st.button("Concept shift", type="primary")
 
 
 if button_0:
@@ -492,6 +493,67 @@ else:
                     width=0.4)
             plt.legend()
             st.pyplot(fig_11)
+            
+    elif button_6:
+        c1, c2 = st.columns((10, 10))
+
+        def compute_lengths(data):
+            length_dict = {}
+
+            for d in data:
+                temp_entities = d[1]['entities']
+                for ent in temp_entities:
+                    entity_type = ent[2]
+                    entity_value = d[0][ent[0]:ent[1]]
+
+                    if entity_type in length_dict:
+                        length_dict[entity_type].append(len(entity_value))
+                    else:
+                        length_dict[entity_type] = [len(entity_value)]
+
+            return length_dict
+
+        def plot_histogram(column, title_text, data1, data2, label1, label2):
+            with column: 
+                st.write(title_text)
+                lengths_1 = compute_lengths(data1)
+                lengths_2 = compute_lengths(data2)
+                
+                common_keys = set(lengths_1.keys()).intersection(set(lengths_2.keys()))
+                
+                if len(common_keys) == 1:
+                    fig, ax = plt.subplots(figsize=(10, 5))
+                    ax.hist(lengths_1[list(common_keys)[0]], bins=20, alpha=0.5, label=label1)
+                    ax.hist(lengths_2[list(common_keys)[0]], bins=20, alpha=0.5, label=label2)
+                    ax.set_title(list(common_keys)[0])
+                    ax.set_xlabel('Length')
+                    ax.set_ylabel('Frequency')
+                    ax.legend()
+                else:
+                    fig, axs = plt.subplots(len(common_keys), 1, figsize=(10, 5 * len(common_keys)))
+                    for ax, entity in zip(axs, common_keys):
+                        ax.hist(lengths_1[entity], bins=20, alpha=0.5, label=label1)
+                        ax.hist(lengths_2[entity], bins=20, alpha=0.5, label=label2)
+                        ax.set_title(entity)
+                        ax.set_xlabel('Length')
+                        ax.set_ylabel('Frequency')
+                        ax.legend()
+
+                plt.tight_layout()
+                st.pyplot(fig)
+
+        with open('utilities/dataset_0.6954225242382301.json') as f_1:
+            data_yesterday = json.load(f_1)
+            
+        with open('utilities/dataset_0.7436912184166055.json') as f_2:
+            data_today = json.load(f_2)
+            
+        with open('utilities/validation.json') as f_3:
+            data_validation = json.load(f_3)
+            
+        plot_histogram(c1, "Yesterday vs Today comparison", data_yesterday, data_today, 'f1 (yesterday)', 'f2 (today)')
+        plot_histogram(c2, "Train vs Validation comparison", data_today, data_validation, 'Train', 'Validation')
+     
     else:
         home()
         
