@@ -557,58 +557,80 @@ else:
     #     plot_histogram(c2, "Train vs Validation comparison", data_today, data_validation, 'Train', 'Validation')
     
     elif button_7:
+      
         c1, c2 = st.columns((10, 10))
         
         with c1:
-            st.markdown('Entire Resume')
+            st.write("Distribution for Certifications")
+            # F1 Score
             fig_9 = plt.figure()
-            sns.histplot(df_entire_resume['f1_score'], kde=True)
+            sns.histplot(df_entire_resume['CERTIFICATIONS_f1_score'], kde=True)
             plt.xlabel('F1 Score')
             plt.ylabel('Frequency')
-            plt.title('Distribution of F1 Scores')
+            plt.title('F1 Scores')
             st.pyplot(fig_9)
 
-            st.markdown('Personal Details')
+            # Precision
             fig_10 = plt.figure()
-            sns.histplot(df_personal_details_section['f1_score'], kde=True)
-            plt.xlabel('F1 Score')
+            sns.histplot(df_entire_resume['CERTIFICATIONS_precision'], kde=True)
+            plt.xlabel('Precision')
             plt.ylabel('Frequency')
-            plt.title('Distribution of F1 Scores')
+            plt.title('Precision')
             st.pyplot(fig_10)
 
-        with c2:
-            st.markdown('Experience Details')
+            # Recall
             fig_11 = plt.figure()
-            sns.histplot(df_experience_details_section['f1_score'], kde=True)
-            plt.xlabel('F1 Score')
+            sns.histplot(df_entire_resume['CERTIFICATIONS_recall'], kde=True)
+            plt.xlabel('Recall')
             plt.ylabel('Frequency')
-            plt.title('Distribution of F1 Scores')
+            plt.title('Recall')
             st.pyplot(fig_11)
-
-            st.markdown('Education Details')
-            fig_12 = plt.figure()
-            sns.histplot(df_education_details_section['f1_score'], kde=True)
+            
+        with c2: 
+            st.write("Distribution for Client")
+            # F1 Score
+            fig_9 = plt.figure()
+            sns.histplot(df_entire_resume['CLIENT_f1_score'], kde=True)
             plt.xlabel('F1 Score')
             plt.ylabel('Frequency')
-            plt.title('Distribution of F1 Scores')
-            st.pyplot(fig_12)
+            plt.title('F1 Scores')
+            st.pyplot(fig_9)
+
+            # Precision
+            fig_10 = plt.figure()
+            sns.histplot(df_entire_resume['CLIENT_precision'], kde=True)
+            plt.xlabel('Precision')
+            plt.ylabel('Frequency')
+            plt.title('Precision')
+            st.pyplot(fig_10)
+
+            # Recall
+            fig_11 = plt.figure()
+            sns.histplot(df_entire_resume['CLIENT_recall'], kde=True)
+            plt.xlabel('Recall')
+            plt.ylabel('Frequency')
+            plt.title('Recall')
+            st.pyplot(fig_11)
+            
+
             
     elif button_8:
-        c1, c2 = st.columns(2)
 
-        with c1:
-            st.markdown('**Entire Resume Data Summary**')
-            st.table(df_entire_resume['f1_score'].describe())
+        def display_summary(df, section_name):
+            st.markdown(f'**{section_name} Data Summary**')
+            st.write(f"F1 Score: {df[f'{section_name}_f1_score'].mean():.2f}")
+            st.write(f"Precision: {df[f'{section_name}_precision'].mean():.2f}")
+            st.write(f"Recall: {df[f'{section_name}_recall'].mean():.2f}")
+            st.table(df[[f'{section_name}_f1_score', f'{section_name}_precision', f'{section_name}_recall']].describe())
 
-            st.markdown('**Personal Details Data Summary**')
-            st.table(df_personal_details_section['f1_score'].describe())
+        
+        display_summary(df_entire_resume, 'CERTIFICATIONS')
 
-        with c2:
-            st.markdown('**Experience Details Data Summary**')
-            st.table(df_experience_details_section['f1_score'].describe())
+        
+        display_summary(df_entire_resume, 'CLIENT')
 
-            st.markdown('**Education Details Data Summary**')
-            st.table(df_education_details_section['f1_score'].describe())
+        
+        display_summary(df_entire_resume, 'COMPANY_LOC')
             
     else:
         home()
