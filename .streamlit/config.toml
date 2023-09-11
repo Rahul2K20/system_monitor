@@ -18,4 +18,4 @@ secondaryTextColor = "#777777"
 accentColor = "#A72037" 
 
 # Font family for all text in the app, except code blocks.
-font = "Roboto"
+font = "sans serif"

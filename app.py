@@ -16,7 +16,7 @@ def home():
         
         
     gif_url = "https://www.thedigitalgroup.com/products/digital-resume-parser/assets/img/about/resume-parsing-option.gif"
-    st.image(gif_url, caption='Resume Parsing in Action', use_column_width=True)
+    st.image(gif_url, use_column_width=True)
 
     st.subheader("Features at a Glance:")
     st.markdown("""
@@ -65,7 +65,8 @@ with st.sidebar:
     button_2 = st.button("Anomaly Detection", type="primary")
     button_4 = st.button("Covariate shift", type="primary")
     button_5 = st.button("Univariate shift", type="primary")
-    button_6 = st.button("Concept shift", type="primary")
+    # button_6 = st.button("Concept shift", type="primary")
+    button_7 = st.button("Co-occurence Analysis", type="primary")
 
 
 if button_0:
@@ -494,65 +495,96 @@ else:
             plt.legend()
             st.pyplot(fig_11)
             
-    elif button_6:
-        c1, c2 = st.columns((10, 10))
+    # elif button_6:
+    #     c1, c2 = st.columns((10, 10))
 
-        def compute_lengths(data):
-            length_dict = {}
+    #     def compute_lengths(data):
+    #         length_dict = {}
 
+    #         for d in data:
+    #             temp_entities = d[1]['entities']
+    #             for ent in temp_entities:
+    #                 entity_type = ent[2]
+    #                 entity_value = d[0][ent[0]:ent[1]]
+
+    #                 if entity_type in length_dict:
+    #                     length_dict[entity_type].append(len(entity_value))
+    #                 else:
+    #                     length_dict[entity_type] = [len(entity_value)]
+
+    #         return length_dict
+
+    #     def plot_histogram(column, title_text, data1, data2, label1, label2):
+    #         with column: 
+    #             st.write(title_text)
+    #             lengths_1 = compute_lengths(data1)
+    #             lengths_2 = compute_lengths(data2)
+                
+    #             common_keys = set(lengths_1.keys()).intersection(set(lengths_2.keys()))
+                
+    #             if len(common_keys) == 1:
+    #                 fig, ax = plt.subplots(figsize=(10, 5))
+    #                 ax.hist(lengths_1[list(common_keys)[0]], bins=20, alpha=0.5, label=label1)
+    #                 ax.hist(lengths_2[list(common_keys)[0]], bins=20, alpha=0.5, label=label2)
+    #                 ax.set_title(list(common_keys)[0])
+    #                 ax.set_xlabel('Length')
+    #                 ax.set_ylabel('Frequency')
+    #                 ax.legend()
+    #             else:
+    #                 fig, axs = plt.subplots(len(common_keys), 1, figsize=(10, 5 * len(common_keys)))
+    #                 for ax, entity in zip(axs, common_keys):
+    #                     ax.hist(lengths_1[entity], bins=20, alpha=0.5, label=label1)
+    #                     ax.hist(lengths_2[entity], bins=20, alpha=0.5, label=label2)
+    #                     ax.set_title(entity)
+    #                     ax.set_xlabel('Length')
+    #                     ax.set_ylabel('Frequency')
+    #                     ax.legend()
+
+    #             plt.tight_layout()
+    #             st.pyplot(fig)
+
+    #     with open('utilities/dataset_0.6954225242382301.json') as f_1:
+    #         data_yesterday = json.load(f_1)
+            
+    #     with open('utilities/dataset_0.7436912184166055.json') as f_2:
+    #         data_today = json.load(f_2)
+            
+    #     with open('utilities/validation.json') as f_3:
+    #         data_validation = json.load(f_3)
+            
+    #     plot_histogram(c1, "Yesterday vs Today comparison", data_yesterday, data_today, 'f1 (yesterday)', 'f2 (today)')
+    #     plot_histogram(c2, "Train vs Validation comparison", data_today, data_validation, 'Train', 'Validation')
+    
+    elif button_7:
+        def co_occurrence(data):
+            co_occurrence_dict = {}
             for d in data:
-                temp_entities = d[1]['entities']
-                for ent in temp_entities:
-                    entity_type = ent[2]
-                    entity_value = d[0][ent[0]:ent[1]]
-
-                    if entity_type in length_dict:
-                        length_dict[entity_type].append(len(entity_value))
-                    else:
-                        length_dict[entity_type] = [len(entity_value)]
-
-            return length_dict
-
-        def plot_histogram(column, title_text, data1, data2, label1, label2):
-            with column: 
-                st.write(title_text)
-                lengths_1 = compute_lengths(data1)
-                lengths_2 = compute_lengths(data2)
-                
-                common_keys = set(lengths_1.keys()).intersection(set(lengths_2.keys()))
-                
-                if len(common_keys) == 1:
-                    fig, ax = plt.subplots(figsize=(10, 5))
-                    ax.hist(lengths_1[list(common_keys)[0]], bins=20, alpha=0.5, label=label1)
-                    ax.hist(lengths_2[list(common_keys)[0]], bins=20, alpha=0.5, label=label2)
-                    ax.set_title(list(common_keys)[0])
-                    ax.set_xlabel('Length')
-                    ax.set_ylabel('Frequency')
-                    ax.legend()
-                else:
-                    fig, axs = plt.subplots(len(common_keys), 1, figsize=(10, 5 * len(common_keys)))
-                    for ax, entity in zip(axs, common_keys):
-                        ax.hist(lengths_1[entity], bins=20, alpha=0.5, label=label1)
-                        ax.hist(lengths_2[entity], bins=20, alpha=0.5, label=label2)
-                        ax.set_title(entity)
-                        ax.set_xlabel('Length')
-                        ax.set_ylabel('Frequency')
-                        ax.legend()
-
-                plt.tight_layout()
-                st.pyplot(fig)
-
-        with open('utilities/dataset_0.6954225242382301.json') as f_1:
-            data_yesterday = json.load(f_1)
+                temp_entities = [e[2] for e in d[1]['entities']]
+                for entity_1 in temp_entities:
+                    for entity_2 in temp_entities:
+                        if entity_1 != entity_2:
+                            pair = tuple(sorted([entity_1, entity_2]))
+                            co_occurrence_dict[pair] = co_occurrence_dict.get(pair, 0) + 1
+            return co_occurrence_dict
+        
+        def co_visualize(co_occurrence_dict):
+            df = pd.DataFrame(co_occurrence_dict.items(), columns=['Pairs', 'Counts'])
+            df['Pairs'] = df['Pairs'].apply(lambda x: " & ".join(x))
             
-        with open('utilities/dataset_0.7436912184166055.json') as f_2:
-            data_today = json.load(f_2)
+            df = df.sort_values(by='Counts', ascending=False).head(5)
             
-        with open('utilities/validation.json') as f_3:
-            data_validation = json.load(f_3)
-            
-        plot_histogram(c1, "Yesterday vs Today comparison", data_yesterday, data_today, 'f1 (yesterday)', 'f2 (today)')
-        plot_histogram(c2, "Train vs Validation comparison", data_today, data_validation, 'Train', 'Validation')
+            fig, ax = plt.subplots(figsize=(15,10))  
+            sns.barplot(x=df['Pairs'], y=df['Counts'], palette="viridis", orient='v', ax=ax)  
+            plt.xticks(rotation=90)
+            plt.ylabel('Co-occurrence Count')
+            plt.xlabel('Entity Pairs')
+            plt.title('Top 5 Co-occurrence of Entities in Dataset')
+            st.pyplot(fig) 
+
+        data_1 = json.load(open('utilities/dataset_0.6954225242382301.json'))
+        co_occurrence_data_1 = co_occurrence(data_1)
+        co_visualize(co_occurrence_data_1)
+
      
     else:
         home()
