@@ -66,7 +66,8 @@ with st.sidebar:
     button_4 = st.button("Covariate shift", type="primary")
     button_5 = st.button("Univariate shift", type="primary")
     # button_6 = st.button("Concept shift", type="primary")
-    button_7 = st.button("Co-occurence Analysis", type="primary")
+    button_7 = st.button("Distribution Analysis", type="primary")
+    button_8 = st.button("Data Summary", type="primary")
 
 
 if button_0:
@@ -556,36 +557,59 @@ else:
     #     plot_histogram(c2, "Train vs Validation comparison", data_today, data_validation, 'Train', 'Validation')
     
     elif button_7:
-        def co_occurrence(data):
-            co_occurrence_dict = {}
-            for d in data:
-                temp_entities = [e[2] for e in d[1]['entities']]
-                for entity_1 in temp_entities:
-                    for entity_2 in temp_entities:
-                        if entity_1 != entity_2:
-                            pair = tuple(sorted([entity_1, entity_2]))
-                            co_occurrence_dict[pair] = co_occurrence_dict.get(pair, 0) + 1
-            return co_occurrence_dict
+        c1, c2 = st.columns((10, 10))
         
-        def co_visualize(co_occurrence_dict):
-            df = pd.DataFrame(co_occurrence_dict.items(), columns=['Pairs', 'Counts'])
-            df['Pairs'] = df['Pairs'].apply(lambda x: " & ".join(x))
-            
-            df = df.sort_values(by='Counts', ascending=False).head(5)
-            
-            fig, ax = plt.subplots(figsize=(15,10))  
-            sns.barplot(x=df['Pairs'], y=df['Counts'], palette="viridis", orient='v', ax=ax)  
-            plt.xticks(rotation=90)
-            plt.ylabel('Co-occurrence Count')
-            plt.xlabel('Entity Pairs')
-            plt.title('Top 5 Co-occurrence of Entities in Dataset')
-            st.pyplot(fig) 
+        with c1:
+            st.markdown('Entire Resume')
+            fig_9 = plt.figure()
+            sns.histplot(df_entire_resume['f1_score'], kde=True)
+            plt.xlabel('F1 Score')
+            plt.ylabel('Frequency')
+            plt.title('Distribution of F1 Scores')
+            st.pyplot(fig_9)
 
-        data_1 = json.load(open('utilities/dataset_0.6954225242382301.json'))
-        co_occurrence_data_1 = co_occurrence(data_1)
-        co_visualize(co_occurrence_data_1)
+            st.markdown('Personal Details')
+            fig_10 = plt.figure()
+            sns.histplot(df_personal_details_section['f1_score'], kde=True)
+            plt.xlabel('F1 Score')
+            plt.ylabel('Frequency')
+            plt.title('Distribution of F1 Scores')
+            st.pyplot(fig_10)
 
-     
+        with c2:
+            st.markdown('Experience Details')
+            fig_11 = plt.figure()
+            sns.histplot(df_experience_details_section['f1_score'], kde=True)
+            plt.xlabel('F1 Score')
+            plt.ylabel('Frequency')
+            plt.title('Distribution of F1 Scores')
+            st.pyplot(fig_11)
+
+            st.markdown('Education Details')
+            fig_12 = plt.figure()
+            sns.histplot(df_education_details_section['f1_score'], kde=True)
+            plt.xlabel('F1 Score')
+            plt.ylabel('Frequency')
+            plt.title('Distribution of F1 Scores')
+            st.pyplot(fig_12)
+            
+    elif button_8:
+        c1, c2 = st.columns(2)
+
+        with c1:
+            st.markdown('**Entire Resume Data Summary**')
+            st.table(df_entire_resume['f1_score'].describe())
+
+            st.markdown('**Personal Details Data Summary**')
+            st.table(df_personal_details_section['f1_score'].describe())
+
+        with c2:
+            st.markdown('**Experience Details Data Summary**')
+            st.table(df_experience_details_section['f1_score'].describe())
+
+            st.markdown('**Education Details Data Summary**')
+            st.table(df_education_details_section['f1_score'].describe())
+            
     else:
         home()
         
